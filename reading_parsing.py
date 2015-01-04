@@ -133,7 +133,7 @@ def stevilo_besed(geslo):
         
 def najdi_sskj(geslo, spodnja_meja = 1):
     l = list()
-    if geslo = "*":
+    if geslo == "*":
         for i in range(spodnja_meja, 93154, 25):
             r = requests.get(naslov(geslo, i))
             vzorec = re.compile(r'<font face="Arial Unicode MS"><b>.+</b></font>&nbsp;')
@@ -144,8 +144,8 @@ def najdi_sskj(geslo, spodnja_meja = 1):
                 l += [a]
         return l
     else:
-        zgornj_meja = stevilo_besed(geslo)
-        if zgornja_meja = 0:
+        zgornja_meja = stevilo_besed(geslo)
+        if zgornja_meja == 0:
             return None
         return l
     
