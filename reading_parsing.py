@@ -3,15 +3,17 @@ import requests
 
 
 class Beseda:
-    def __init__(self, niz, definicija = None):
+    def __init__(self, niz, definicija=None):
         self.beseda = niz
         self.definicija = definicija
         self.neznano = set()
         for x in range(len(niz)):
             self.neznano.add(x)
         self.znano = {}
+
     def __str__(self):
         return self.beseda
+
     def __repr__(self):
         napis = self.beseda + ": \n ZNANO:"
         for x in self.znano:
@@ -20,7 +22,6 @@ class Beseda:
         for x in self.neznano:
             napis += " " + self.beseda[x]
         return napis
-        
 
 
 def naredi_slovar_naglasov():
