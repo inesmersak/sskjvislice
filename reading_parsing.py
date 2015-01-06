@@ -283,6 +283,11 @@ def random_besede(tezavnost = "normal", meja = 10, zg_dolzina = 15, sp_dolzina =
 
 
 
+def random_besede2(meja = 10, zg_dolzina = 15, sp_dolzina = 3):
+    return najdi_sskj(geslo = "*", spodnja_meja = random.randint(1,93140), omejitev = meja, zgornja_dolzina = zg_dolzina, spodnja_dolzina = sp_dolzina)
+                      
+    
+
 
 ##def najdi(niz, slovar_naglasov = naredi_slovar_naglasov()):
 ##    iskano_split = niz.split("ge=")
