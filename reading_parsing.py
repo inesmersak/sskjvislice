@@ -158,4 +158,3 @@ def random_beseda(sp_dolzina=3, zg_dolzina=8):
     return najdi_sskj(geslo="*", spodnja_meja=random.randint(1, 93140), omejitev=1, zgornja_dolzina=zg_dolzina,
                       spodnja_dolzina=sp_dolzina)[0]
 
-
