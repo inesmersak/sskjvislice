@@ -3,6 +3,7 @@ from tkinter import *
 
 class Aplikacija():
     def preveri(self, gumb=None, *args):
+        self.gumbi[gumb].grid_remove()
         guess = self.abeceda[gumb]
         if guess in self.beseda:
             self.posodobi(guess)
@@ -32,8 +33,11 @@ class Aplikacija():
         self.odkrito.set(('_' + (' ' * self.spaces)) * (len(self.beseda)-1) + '_')
         Label(okvir, textvariable=self.odkrito).grid(row=0, column=0)
 
+        self.gumbi = []
         for i, l in enumerate(self.abeceda):
-            Button(okvir, text=l, command=lambda x=i: self.preveri(x)).grid(row=i // 9, column=i % 9 + 1)
+            b = Button(okvir, text=l, command=lambda x=i: self.preveri(x))
+            self.gumbi.append(b)
+            b.grid(row=i // 9, column=i % 9 + 1)
 
         self.platno = Canvas(okvir, width=200, height=200)
         self.platno.grid(row=1, column=0, rowspan=3)
