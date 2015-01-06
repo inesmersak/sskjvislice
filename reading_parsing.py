@@ -2,52 +2,7 @@ import re
 import requests
 import random
 from resources import *
-
-
-class Beseda:
-    def __init__(self, niz, defin=None):
-        self.beseda = niz
-        self.definicija = defin
-        self.neznano = niz
-        self.znano = ""
-        for x in range(len(niz)):
-            self.znano += "_"
-        self.poskusi = 0
-        self.napacno = ""
-
-    def __str__(self):
-        return self.beseda
-
-    def __repr__(self):
-        napis = self.beseda
-        return napis
-
-    def definiraj(self):
-        if self.definicija:
-            return self.definicija
-        else:
-            self.definicija = definicija(self.beseda)
-            return self.definicija
-
-    def ugibaj(self, niz, abc=abeceda()):
-        for x in niz:
-            if x not in abc:
-                raise Exception("Napačen vnos!")
-            elif x in self.znano or x in self.napacno:
-                pass
-            elif x in self.beseda:
-                i = 0
-                while i < len(self.beseda):
-                    if x == self.beseda[i]:
-                        self.znano = self.znano[:i] + x + self.znano[i+1:]
-                    i += 1
-                self.neznano = self.neznano.replace(x, "")
-            elif x not in self.beseda:
-                self.poskusi += 1
-                self.napacno += x
-
-    def reseno(self):
-        return len(self.neznano) == 0
+from classes import *
 
 
 def je_slovensko(beseda, abc=abeceda()):
@@ -195,7 +150,8 @@ def random_besede(tezavnost="normal", meja=10, zg_dolzina=15, sp_dolzina=3):
 
 
 def random_besede2(meja=10, zg_dolzina=15, sp_dolzina=3):
-    return najdi_sskj(geslo="*", spodnja_meja=random.randint(1, 93140), omejitev=meja, zgornja_dolzina=zg_dolzina, spodnja_dolzina=sp_dolzina)
+    return najdi_sskj(geslo="*", spodnja_meja=random.randint(1, 93140), omejitev=meja, zgornja_dolzina=zg_dolzina,
+                      spodnja_dolzina=sp_dolzina)
 
 
 ##def najdi(niz, slovar_naglasov = naredi_slovar_naglasov()):
