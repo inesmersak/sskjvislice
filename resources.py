@@ -1,6 +1,6 @@
 def abeceda():
-    return "aeiourbcčdfghjklmnpsštvzž"
-abe=abeceda()
+    return "abcčdefghijklmnoprsštuvzž"
+
 
 def naredi_slovar_naglasov():
     """Unicode kode iz http://www.calcresult.com/reference/text/unicode-list.html"""
@@ -82,3 +82,5 @@ def naredi_slovar_naglasov():
         "&#x0156;",
         "&#x0158;"}
     return slovar_naglasov
+
+abe = abeceda()

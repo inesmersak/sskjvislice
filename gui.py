@@ -12,6 +12,17 @@ class Aplikacija():
     def posodobi(self, r=None):
         if r:
             self.odkrito.set(r)
+        else:
+            self.napacno.set(self.beseda.napacni_poskusi)
+        if self.beseda.reseno() or self.beseda.napacni_poskusi == 11:
+            self.nova_igra()
+
+    def nova_igra(self):
+        for b in self.gumbi:
+            b.grid()
+        self.beseda = Beseda('človek')
+        self.platno.delete(ALL)
+        self.odkrito.set(self.beseda.znano)
 
     def __init__(self, master, beseda, abc):
         self.beseda = beseda
@@ -24,17 +35,21 @@ class Aplikacija():
 
         self.odkrito = StringVar()  # koliko besede je do zdaj odkrito
         self.odkrito.set(self.beseda.znano)
-        Label(okvir, textvariable=self.odkrito).grid(row=0, column=0)
+        Label(okvir, textvariable=self.odkrito).grid(row=1, column=1, columnspan=2)
 
         self.gumbi = []
         for i, l in enumerate(self.abeceda):
             b = Button(okvir, text=l, command=lambda x=i: self.preveri(x))
             self.gumbi.append(b)
-            b.grid(row=i // 9, column=i % 9 + 1)
+            b.grid(row=i // 9 + 1, column=i % 9 + 3)
 
         self.platno = Canvas(okvir, width=200, height=200)
-        self.platno.grid(row=1, column=0, rowspan=3)
+        self.platno.grid(row=2, column=1, rowspan=3, columnspan=2)
 
+        self.napacno = StringVar()
+        self.napacno.set(self.beseda.napacni_poskusi)
+        Label(okvir, text="Napačni poskusi: ").grid(row=5, column=1)
+        Label(okvir, textvariable=self.napacno).grid(row=5, column=2)
 
 root = Tk()
 App = Aplikacija(root, Beseda('mamba'), abeceda())
