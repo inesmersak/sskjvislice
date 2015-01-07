@@ -36,6 +36,7 @@ class Beseda:
             return self.definicija
 
     def ugibaj(self, niz, abc=resources.abeceda()):
+        znano_zdaj = self.znano
         for x in niz:
             if x not in abc:
                 raise Exception("Napačen vnos!")
@@ -49,11 +50,12 @@ class Beseda:
                     i += 1
                 self.neznano = self.neznano.replace(x, "")
                 self.ugibano += x
-                return self.znano
             elif x not in self.beseda:
                 self.ugibano += x
                 self.napacni_poskusi += 1
-                return None
+        if self.znano == znano_zdaj:
+            return None
+        return self.znano
 
     def reseno(self):
         return len(self.neznano) == 0
