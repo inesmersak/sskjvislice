@@ -11,7 +11,7 @@ class Aplikacija():
 
     def posodobi(self, r=None):
         if r:
-            self.odkrito.set(r)
+            self.odkrito.set(self.beseda.za_gui())
         else:
             self.napacno.set(self.beseda.napacni_poskusi)
         if self.beseda.reseno() or self.beseda.napacni_poskusi == 11:
@@ -22,7 +22,8 @@ class Aplikacija():
             b.grid()
         self.beseda = Beseda('človek')
         self.platno.delete(ALL)
-        self.odkrito.set(self.beseda.znano)
+        self.odkrito.set(self.beseda.za_gui())
+        self.napacno.set(self.beseda.napacni_poskusi)
 
     def __init__(self, master, beseda, abc):
         self.beseda = beseda
@@ -30,11 +31,18 @@ class Aplikacija():
         self.spaces = 2
 
         master.title('Vislice')
+
+        # meni
+        self.meni = Menu(master)
+        master.config(menu=self.meni)
+        self.meni.add_command(label="Nova igra", command=self.nova_igra)
+        self.meni.add_command(label="Zapri", command=quit)
+
         okvir = Frame(master, width=600, height=600)
         okvir.grid()
 
         self.odkrito = StringVar()  # koliko besede je do zdaj odkrito
-        self.odkrito.set(self.beseda.znano)
+        self.odkrito.set(self.beseda.za_gui())
         Label(okvir, textvariable=self.odkrito).grid(row=1, column=1, columnspan=2)
 
         self.gumbi = []

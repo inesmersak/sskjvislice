@@ -23,7 +23,7 @@ def naglasi(beseda, slovar_naglasov=naredi_slovar_naglasov()):
 def naslov(geslo, i=1):
     """Spremeni vpisano geslo v url naslov SSKJ-jevega iskalnika"""
     return "http://bos.zrc-sazu.si/cgi/a03.exe?name=sskj_testa&expression=" + \
-           geslo.replace(" ", "+").replace("=*", "%3D*") + "&hs=" + str(i)
+           geslo.replace(" ", "+").replace("ge=", "ge%3D") + "&hs=" + str(i)
 
     
 def stevilo_besed(geslo):
@@ -56,7 +56,9 @@ besede, ne glede na dolžino ali slovenskost.
     zgornja_meja = stevilo_besed(geslo)
     # ločena primera sta zato, ker pri uporabi "ge=" ne obarva rdeče
     if ("*" in geslo) or ("ge=" in geslo):
-        for i in range(spodnja_meja, zgornja_meja, 25):
+        print("ANN PERKINS!")
+        print(naslov(geslo))
+        for i in range(spodnja_meja-1, zgornja_meja, 25):
             r = requests.get(naslov(geslo, i))
             s = vzorec.findall(r.text)
             for x in s:
@@ -71,6 +73,7 @@ besede, ne glede na dolžino ali slovenskost.
         if zgornja_meja == 0:
             return None
         else:
+            print("LESLIE KNOPE!")
             for i in range(spodnja_meja, zgornja_meja, 25):
                 j = 0
                 r = requests.get(naslov(geslo, i))
@@ -158,3 +161,5 @@ def random_beseda(sp_dolzina=3, zg_dolzina=8):
     return najdi_sskj(geslo="*", spodnja_meja=random.randint(1, 93140), omejitev=1, zgornja_dolzina=zg_dolzina,
                       spodnja_dolzina=sp_dolzina)[0]
 
+# print(najdi_sskj("drek"))
+print(naslov("drek"))

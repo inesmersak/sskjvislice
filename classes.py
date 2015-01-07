@@ -28,6 +28,12 @@ class Beseda:
     def velike(self):
         return self.beseda.upper()
 
+    def za_gui(self, presledki=1):
+        g = ""
+        for x in self.znano:
+            g += x + " " * presledki
+        return g[:len(g)-presledki]
+
     def definiraj(self):
         if self.definicija:
             return self.definicija
