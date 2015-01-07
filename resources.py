@@ -1,6 +1,6 @@
 def abeceda():
     return "aeiourbcčdfghjklmnpsštvzž"
-
+abe=abeceda()
 
 def naredi_slovar_naglasov():
     """Unicode kode iz http://www.calcresult.com/reference/text/unicode-list.html"""
