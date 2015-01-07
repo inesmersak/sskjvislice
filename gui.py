@@ -1,7 +1,7 @@
 from tkinter import *
 from classes import *
 from resources import *
-
+from reading_parsing import *
 
 class Aplikacija():
     def preveri(self, gumb=None, *args):
@@ -20,7 +20,7 @@ class Aplikacija():
     def nova_igra(self):
         for b in self.gumbi:
             b.grid()
-        self.beseda = Beseda('človek')
+        self.beseda = reading_parsing.random_beseda()
         self.platno.delete(ALL)
         self.odkrito.set(self.beseda.za_gui())
         self.napacno.set(self.beseda.napacni_poskusi)
@@ -60,5 +60,5 @@ class Aplikacija():
         Label(okvir, textvariable=self.napacno).grid(row=5, column=2)
 
 root = Tk()
-App = Aplikacija(root, Beseda('mamba'), abeceda())
+App = Aplikacija(root, reading_parsing.random_beseda(), abeceda())
 root.mainloop()
