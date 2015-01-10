@@ -1,9 +1,17 @@
+import reading_parsing
 from tkinter import *
-from classes import *
 from resources import *
-from reading_parsing import *
+
 
 class Aplikacija():
+    def pot_do_slike(self):
+        return 'slike/vislice' + str(11-self.beseda.preostali_poskusi) + '.png'
+
+    def posodobi_sliko(self):
+        self.platno.delete(ALL)
+        self.platno.background = PhotoImage(file=self.pot_do_slike())
+        self.platno.create_image(0, 0, image=self.platno.background, anchor='nw')
+
     def preveri(self, gumb=None, *args):
         self.gumbi[gumb].grid_remove()
         guess = self.abeceda[gumb]
@@ -13,17 +21,23 @@ class Aplikacija():
         if r:
             self.odkrito.set(self.beseda.za_gui())
         else:
-            self.napacno.set(self.beseda.napacni_poskusi)
-        if self.beseda.reseno() or self.beseda.napacni_poskusi == 11:
-            self.nova_igra()
+            self.napacno.set(self.beseda.preostali_poskusi)
+            self.posodobi_sliko()
+        if self.beseda.reseno() or self.beseda.preostali_poskusi == 0:
+            self.odkrito.set(self.beseda.za_gui(True))
+            self.defin.set(reading_parsing.definiraj(self.beseda))
+            self.posodobi_sliko()
+            for b in self.gumbi:
+                b.grid_remove()
+            self.beseda = reading_parsing.random_beseda()
 
     def nova_igra(self):
         for b in self.gumbi:
             b.grid()
-        self.beseda = reading_parsing.random_beseda()
-        self.platno.delete(ALL)
+        self.defin.set('')
+        self.posodobi_sliko()
         self.odkrito.set(self.beseda.za_gui())
-        self.napacno.set(self.beseda.napacni_poskusi)
+        self.napacno.set(self.beseda.preostali_poskusi)
 
     def __init__(self, master, beseda, abc):
         self.beseda = beseda
@@ -31,6 +45,7 @@ class Aplikacija():
         self.spaces = 2
 
         master.title('Vislice')
+        master.minsize(width=400, height=300)
 
         # meni
         self.meni = Menu(master)
@@ -51,13 +66,21 @@ class Aplikacija():
             self.gumbi.append(b)
             b.grid(row=i // 9 + 1, column=i % 9 + 3)
 
+        self.defin = StringVar()
+        Label(okvir, textvariable=self.defin).grid(row=2, column=1, columnspan=2)
+
+        self.novo = Button(okvir, text="Nova igra", command=self.nova_igra)
+        self.novo.grid(row=3, column=1, columnspan=2)
+
         self.platno = Canvas(okvir, width=200, height=200)
-        self.platno.grid(row=2, column=1, rowspan=3, columnspan=2)
+        self.platno.grid(row=4, column=1, rowspan=3, columnspan=2)
+        self.platno.background = PhotoImage(file=self.pot_do_slike())
+        self.platno.create_image(0, 0, image=self.platno.background, anchor='nw')
 
         self.napacno = StringVar()
-        self.napacno.set(self.beseda.napacni_poskusi)
-        Label(okvir, text="Napačni poskusi: ").grid(row=5, column=1)
-        Label(okvir, textvariable=self.napacno).grid(row=5, column=2)
+        self.napacno.set(self.beseda.preostali_poskusi)
+        Label(okvir, text="Preostali poskusi: ").grid(row=6, column=1)
+        Label(okvir, textvariable=self.napacno).grid(row=6, column=2)
 
 root = Tk()
 App = Aplikacija(root, reading_parsing.random_beseda(), abeceda())

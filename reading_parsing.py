@@ -1,9 +1,8 @@
 import re
 import requests
 import random
-import classes
+from classes import *
 from resources import *
-
 
 
 def je_slovensko(beseda, abc=abeceda()):
@@ -62,7 +61,7 @@ besede, ne glede na dolžino ali slovenskost.
             s = vzorec.findall(r.text)
             for x in s:
                 zadetek = re.match(vzorec2, x)
-                a = classes.Beseda(naglasi(zadetek.group(1)))
+                a = Beseda(naglasi(zadetek.group(1)))
                 if pogojnost(a, pogoj):
                     l += [a]
                     if len(l) >= omejitev:
@@ -80,7 +79,7 @@ besede, ne glede na dolžino ali slovenskost.
                     zadetek = re.match(vzorec2, x)
                     a = naglasi(zadetek.group(1))
                     if "<font color=red>" in a:  # ustavi, ko najde vse besede, ki vsebujejo geslo
-                        b = classes.Beseda(naglasi(a).replace("<font color=red>", "").replace("</font>", ""))
+                        b = Beseda(naglasi(a).replace("<font color=red>", "").replace("</font>", ""))
                         if pogojnost(b, pogoj):
                             l += [b]
                             if len(l) >= omejitev:
@@ -114,6 +113,14 @@ def definicija(geslo):
                 else:
                     pass
     return mnozica
+
+
+def definiraj(beseda):
+    if beseda.definicija:
+        return beseda.definicija
+    else:
+        beseda.definicija = definicija(beseda.beseda)
+        return beseda.definicija
 
 
 def random_crke(tezavnost="normal"):

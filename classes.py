@@ -1,4 +1,3 @@
-import reading_parsing
 import resources
 
 
@@ -8,7 +7,7 @@ class Beseda:
         self.definicija = defin
         self.neznano = niz
         self.znano = "_" * len(niz)
-        self.napacni_poskusi = 0  # koliko crk je bilo napacnih
+        self.preostali_poskusi = 11  # koliko poskusov je se do konca
         self.ugibano = ""  # vse do zdaj ugibane crke
 
     def __str__(self):
@@ -28,18 +27,15 @@ class Beseda:
     def velike(self):
         return self.beseda.upper()
 
-    def za_gui(self, presledki=1):
+    def za_gui(self, konec=False, presledki=1):
         g = ""
-        for x in self.znano:
-            g += x + " " * presledki
-        return g[:len(g)-presledki]
-
-    def definiraj(self):
-        if self.definicija:
-            return self.definicija
+        if konec:
+            for x in self.beseda:
+                g += x + " " * presledki
         else:
-            self.definicija = reading_parsing.definicija(self.beseda)
-            return self.definicija
+            for x in self.znano:
+                g += x + " " * presledki
+        return g[:len(g)-presledki]
 
     def ugibaj(self, niz, abc=resources.abeceda()):
         znano_zdaj = self.znano
@@ -58,7 +54,7 @@ class Beseda:
                 self.ugibano += x
             elif x not in self.beseda:
                 self.ugibano += x
-                self.napacni_poskusi += 1
+                self.preostali_poskusi -= 1
         if self.znano == znano_zdaj:
             return None
         return self.znano
