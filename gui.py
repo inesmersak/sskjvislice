@@ -12,14 +12,16 @@ class Aplikacija():
         self.platno.background = PhotoImage(file=self.pot_do_slike())
         self.platno.create_image(0, 0, image=self.platno.background, anchor='nw')
 
-    def preveri(self, gumb=None, *args):
-        if type(gumb) == int:  # ce je uporabnik pritisnil na gumb na zaslonu
-            self.gumbi[gumb].grid_remove()
-            guess = self.abeceda[gumb]
-        elif type(gumb) == Event:  # ce je uporabnik pritisnil na tipko na tipkovnici
-            indeks = self.abeceda.find(gumb.char)
-            self.gumbi[indeks].grid_remove()
-            guess = gumb.char
+    def preveri(self, gumb=None):
+        # if type(gumb) == int:  # ce je uporabnik pritisnil na gumb na zaslonu
+        self.gumbi[gumb].grid_remove()
+        guess = self.abeceda[gumb]
+        # elif type(gumb) == Event:  # ce je uporabnik pritisnil na tipko na tipkovnici
+        #     guess = gumb.char
+        #     if guess in self.abeceda:
+        #         indeks = self.abeceda.find(guess)
+        #         self.gumbi[indeks].grid_remove()
+        self.novo = False
         self.posodobi(self.beseda.ugibaj(guess))
 
     def posodobi(self, r=None):
@@ -35,8 +37,12 @@ class Aplikacija():
             for b in self.gumbi:
                 b.grid_remove()
             self.beseda = reading_parsing.random_beseda()
+            self.novo = True
 
     def nova_igra(self):
+        if not self.novo:
+            self.beseda = reading_parsing.random_beseda()
+            self.novo = True
         for b in self.gumbi:
             b.grid()
         self.defin.set('')
@@ -48,6 +54,7 @@ class Aplikacija():
         self.beseda = beseda
         self.abeceda = abc
         self.spaces = 2
+        self.novo = True  # nam pove ali je beseda povsem nova ali ne
 
         master.title('Vislice')
         master.minsize(width=380, height=300)
@@ -68,8 +75,8 @@ class Aplikacija():
         self.defin = StringVar()
         Label(okvir, textvariable=self.defin).grid(row=1, column=0)
 
-        self.novo = Button(okvir, text="Nova igra", command=self.nova_igra)
-        self.novo.grid(row=2, column=0)
+        novo = Button(okvir, text="Nova igra", command=self.nova_igra)
+        novo.grid(row=2, column=0)
 
         tipkovnica = Frame(master)
         tipkovnica.grid(row=0, column=1)
@@ -92,7 +99,7 @@ class Aplikacija():
         Label(okvir1, textvariable=self.napacno).grid(row=0, column=1)
 
         # bindingi
-        master.bind("a", self.preveri)
+        # master.bind("<Key>", self.preveri)
 
 root = Tk()
 App = Aplikacija(root, reading_parsing.random_beseda(), abeceda())
