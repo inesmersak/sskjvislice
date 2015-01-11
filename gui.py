@@ -7,6 +7,19 @@ class Aplikacija():
     def pot_do_slike(self):
         return 'slike/vislice' + str(11-self.beseda.preostali_poskusi) + '.png'
 
+    def polepsaj_definicijo(self):
+        sez = reading_parsing.definiraj(self.beseda)
+        niz = ''
+        for i, x in enumerate(sez):
+            niz += str(i + 1) + '.  '
+            x = x.split()
+            for j, l in enumerate(x):
+                niz += l + ' '
+                if j > 0 and j % 9 == 0 and len(x) != j+1:
+                    niz += '\n'
+            niz += '\n'
+        return niz
+
     def posodobi_sliko(self):
         self.platno.delete(ALL)
         self.platno.background = PhotoImage(file=self.pot_do_slike())
@@ -39,7 +52,7 @@ class Aplikacija():
         if self.beseda.reseno() or self.beseda.preostali_poskusi == 0:
             self.gamestate = False
             self.odkrito.set(self.beseda.za_gui(True))
-            self.defin.set(reading_parsing.definiraj(self.beseda))
+            self.defin.set(self.polepsaj_definicijo())
             self.posodobi_sliko()
             for b in self.gumbi:
                 b.grid_remove()
@@ -49,7 +62,6 @@ class Aplikacija():
                 self.porazi.set(str(int(self.porazi.get()) + 1))
             self.beseda = reading_parsing.random_beseda()
             self.novo = True
-
 
     def nova_igra(self, *args):
         if not self.novo:
@@ -105,16 +117,16 @@ class Aplikacija():
         self.platno.background = PhotoImage(file=self.pot_do_slike())
         self.platno.create_image(0, 0, image=self.platno.background, anchor='nw')
 
-        statistika = Frame(master)
-        statistika.grid(row=1, column=1)
+        statistika = LabelFrame(master, text="Statistika", font="bold", padx=8, pady=8)
+        statistika.grid(row=1, column=1, sticky='s')
         self.zmage = StringVar()
         self.zmage.set(0)
         self.porazi = StringVar()
         self.porazi.set(0)
-        Label(statistika, text="Zmage: ").grid(row=0, column=0)
-        Label(statistika, textvariable=self.zmage).grid(row=0, column=1)
-        Label(statistika, text="Porazi: ").grid(row=1, column=0)
-        Label(statistika, textvariable=self.porazi).grid(row=1, column=1)
+        Label(statistika, text="Zmage: ").grid(row=0, column=0, sticky='w')
+        Label(statistika, textvariable=self.zmage).grid(row=0, column=1, sticky='e')
+        Label(statistika, text="Porazi: ").grid(row=1, column=0, sticky='w')
+        Label(statistika, textvariable=self.porazi).grid(row=1, column=1, sticky='e')
 
         okvir1 = Frame(master)
         okvir1.grid(row=2, column=0)
