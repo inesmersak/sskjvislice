@@ -21,10 +21,12 @@ class Aplikacija():
             if guess in self.abeceda:
                 indeks = self.abeceda.find(guess)
                 self.gumbi[indeks].grid_remove()
-        self.novo = False
+        if self.gamestate:
+            self.novo = False
         try:
-            r = self.beseda.ugibaj(guess)
-            self.posodobi(r)
+            if self.gamestate:
+                r = self.beseda.ugibaj(guess)
+                self.posodobi(r)
         except ValueError:
             pass
 
@@ -35,13 +37,19 @@ class Aplikacija():
             self.napacno.set(self.beseda.preostali_poskusi)
             self.posodobi_sliko()
         if self.beseda.reseno() or self.beseda.preostali_poskusi == 0:
+            self.gamestate = False
             self.odkrito.set(self.beseda.za_gui(True))
             self.defin.set(reading_parsing.definiraj(self.beseda))
             self.posodobi_sliko()
             for b in self.gumbi:
                 b.grid_remove()
+            if self.beseda.reseno():
+                self.zmage.set(str(int(self.zmage.get()) + 1))
+            elif self.beseda.preostali_poskusi == 0:
+                self.porazi.set(str(int(self.porazi.get()) + 1))
             self.beseda = reading_parsing.random_beseda()
             self.novo = True
+
 
     def nova_igra(self, *args):
         if not self.novo:
@@ -53,12 +61,14 @@ class Aplikacija():
         self.posodobi_sliko()
         self.odkrito.set(self.beseda.za_gui())
         self.napacno.set(self.beseda.preostali_poskusi)
+        self.gamestate = True
 
     def __init__(self, master, beseda, abc):
         self.beseda = beseda
         self.abeceda = abc
         self.spaces = 2
-        self.novo = True  # nam pove ali je beseda povsem nova ali ne
+        self.novo = True  # nam pove ali je beseda povsem nova ali ne - oz. ali je uporabnik že začel ugibati
+        self.gamestate = True  # nam pove ali igra teče ali ne
 
         master.title('Vislice')
         master.minsize(width=380, height=300)
@@ -66,8 +76,8 @@ class Aplikacija():
         # meni
         self.meni = Menu(master)
         master.config(menu=self.meni)
-        self.meni.add_command(label="Nova igra", command=self.nova_igra)
-        self.meni.add_command(label="Zapri", command=quit)
+        self.meni.add_command(label="Nova igra  [F1] ", command=self.nova_igra)
+        self.meni.add_command(label="Zapri  [Esc]", command=quit)
 
         okvir = Frame(master)
         okvir.grid(row=0, column=0)
@@ -95,6 +105,17 @@ class Aplikacija():
         self.platno.background = PhotoImage(file=self.pot_do_slike())
         self.platno.create_image(0, 0, image=self.platno.background, anchor='nw')
 
+        statistika = Frame(master)
+        statistika.grid(row=1, column=1)
+        self.zmage = StringVar()
+        self.zmage.set(0)
+        self.porazi = StringVar()
+        self.porazi.set(0)
+        Label(statistika, text="Zmage: ").grid(row=0, column=0)
+        Label(statistika, textvariable=self.zmage).grid(row=0, column=1)
+        Label(statistika, text="Porazi: ").grid(row=1, column=0)
+        Label(statistika, textvariable=self.porazi).grid(row=1, column=1)
+
         okvir1 = Frame(master)
         okvir1.grid(row=2, column=0)
         self.napacno = StringVar()
@@ -105,6 +126,7 @@ class Aplikacija():
         # bindingi
         master.bind("<Key>", self.preveri)
         master.bind("<F1>", self.nova_igra)
+        master.bind("<Escape>", quit)
 
 root = Tk()
 App = Aplikacija(root, reading_parsing.random_beseda(), abeceda())
