@@ -13,8 +13,13 @@ class Aplikacija():
         self.platno.create_image(0, 0, image=self.platno.background, anchor='nw')
 
     def preveri(self, gumb=None, *args):
-        self.gumbi[gumb].grid_remove()
-        guess = self.abeceda[gumb]
+        if type(gumb) == int:  # ce je uporabnik pritisnil na gumb na zaslonu
+            self.gumbi[gumb].grid_remove()
+            guess = self.abeceda[gumb]
+        elif type(gumb) == Event:  # ce je uporabnik pritisnil na tipko na tipkovnici
+            indeks = self.abeceda.find(gumb.char)
+            self.gumbi[indeks].grid_remove()
+            guess = gumb.char
         self.posodobi(self.beseda.ugibaj(guess))
 
     def posodobi(self, r=None):
@@ -85,6 +90,9 @@ class Aplikacija():
         self.napacno.set(self.beseda.preostali_poskusi)
         Label(okvir1, text="Preostali poskusi: ").grid(row=0, column=0)
         Label(okvir1, textvariable=self.napacno).grid(row=0, column=1)
+
+        # bindingi
+        master.bind("a", self.preveri)
 
 root = Tk()
 App = Aplikacija(root, reading_parsing.random_beseda(), abeceda())
