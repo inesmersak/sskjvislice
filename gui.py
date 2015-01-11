@@ -13,16 +13,20 @@ class Aplikacija():
         self.platno.create_image(0, 0, image=self.platno.background, anchor='nw')
 
     def preveri(self, gumb=None):
-        # if type(gumb) == int:  # ce je uporabnik pritisnil na gumb na zaslonu
-        self.gumbi[gumb].grid_remove()
-        guess = self.abeceda[gumb]
-        # elif type(gumb) == Event:  # ce je uporabnik pritisnil na tipko na tipkovnici
-        #     guess = gumb.char
-        #     if guess in self.abeceda:
-        #         indeks = self.abeceda.find(guess)
-        #         self.gumbi[indeks].grid_remove()
+        if type(gumb) == int:  # ce je uporabnik pritisnil na gumb na zaslonu
+            self.gumbi[gumb].grid_remove()
+            guess = self.abeceda[gumb]
+        elif type(gumb) == Event:  # ce je uporabnik pritisnil na tipko na tipkovnici
+            guess = gumb.char
+            if guess in self.abeceda:
+                indeks = self.abeceda.find(guess)
+                self.gumbi[indeks].grid_remove()
         self.novo = False
-        self.posodobi(self.beseda.ugibaj(guess))
+        try:
+            r = self.beseda.ugibaj(guess)
+            self.posodobi(r)
+        except ValueError:
+            pass
 
     def posodobi(self, r=None):
         if r:
@@ -39,7 +43,7 @@ class Aplikacija():
             self.beseda = reading_parsing.random_beseda()
             self.novo = True
 
-    def nova_igra(self):
+    def nova_igra(self, *args):
         if not self.novo:
             self.beseda = reading_parsing.random_beseda()
             self.novo = True
@@ -99,7 +103,8 @@ class Aplikacija():
         Label(okvir1, textvariable=self.napacno).grid(row=0, column=1)
 
         # bindingi
-        # master.bind("<Key>", self.preveri)
+        master.bind("<Key>", self.preveri)
+        master.bind("<F1>", self.nova_igra)
 
 root = Tk()
 App = Aplikacija(root, reading_parsing.random_beseda(), abeceda())
