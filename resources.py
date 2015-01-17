@@ -84,3 +84,4 @@ def naredi_slovar_naglasov():
     return slovar_naglasov
 
 abe = abeceda()
+slovar_naglasov = naredi_slovar_naglasov()

@@ -1,18 +1,18 @@
 import re
 import requests
 import random
+import resources
 from classes import *
-from resources import *
 
 
-def je_slovensko(beseda, abc=abeceda()):
+def je_slovensko(beseda, abc=resources.abe):
     for x in beseda:
         if x not in abc:
             return False
     return True
 
 
-def naglasi(beseda, slovar_naglasov=naredi_slovar_naglasov()):
+def naglasi(beseda, slovar_naglasov=resources.slovar_naglasov):
     popravljeno = beseda
     for k in slovar_naglasov:
         for v in slovar_naglasov[k]:
@@ -143,7 +143,7 @@ def random_crke(tezavnost="normal"):
             z = random.randint(0, 5)
             y = random.randint(5, 24)
             x = random.randint(5, 24)
-    return abeceda()[x] + abeceda()[y] + abeceda()[z]
+    return resources.abe[x] + resources.abe[y] + resources.abe[z]
 
 
 def random_besede(tezavnost="normal", meja=10, zg_dolzina=15, sp_dolzina=3):

@@ -1,6 +1,6 @@
 import reading_parsing
+import resources
 from tkinter import *
-from resources import *
 
 
 class Aplikacija():
@@ -31,7 +31,7 @@ class Aplikacija():
             guess = self.abeceda[gumb]
         elif type(gumb) == Event:  # ce je uporabnik pritisnil na tipko na tipkovnici
             guess = gumb.char
-            if guess in self.abeceda:
+            if guess in self.abeceda and guess != '':
                 indeks = self.abeceda.find(guess)
                 self.gumbi[indeks].grid_remove()
         if self.gamestate:
@@ -40,8 +40,8 @@ class Aplikacija():
             if self.gamestate:
                 r = self.beseda.ugibaj(guess)
                 self.posodobi(r)
-        except ValueError:
-            pass
+        except ValueError as e:
+            print(e)
 
     def posodobi(self, r=None):
         if r:
@@ -52,7 +52,6 @@ class Aplikacija():
         if self.beseda.reseno() or self.beseda.preostali_poskusi == 0:
             self.gamestate = False
             self.odkrito.set(self.beseda.za_gui(True))
-            self.defin.set(self.polepsaj_definicijo())
             self.posodobi_sliko()
             for b in self.gumbi:
                 b.grid_remove()
@@ -60,6 +59,7 @@ class Aplikacija():
                 self.zmage.set(str(int(self.zmage.get()) + 1))
             elif self.beseda.preostali_poskusi == 0:
                 self.porazi.set(str(int(self.porazi.get()) + 1))
+            self.defin.set(self.polepsaj_definicijo())
             self.beseda = reading_parsing.random_beseda()
             self.novo = True
 
@@ -75,6 +75,9 @@ class Aplikacija():
         self.napacno.set(self.beseda.preostali_poskusi)
         self.gamestate = True
 
+    def quit(self, *args):
+        root.destroy()
+
     def __init__(self, master, beseda, abc):
         self.beseda = beseda
         self.abeceda = abc
@@ -89,7 +92,7 @@ class Aplikacija():
         self.meni = Menu(master)
         master.config(menu=self.meni)
         self.meni.add_command(label="Nova igra  [F1] ", command=self.nova_igra)
-        self.meni.add_command(label="Zapri  [Esc]", command=quit)
+        self.meni.add_command(label="Zapri  [Esc]", command=self.quit)
 
         okvir = Frame(master)
         okvir.grid(row=0, column=0)
@@ -138,8 +141,8 @@ class Aplikacija():
         # bindingi
         master.bind("<Key>", self.preveri)
         master.bind("<F1>", self.nova_igra)
-        master.bind("<Escape>", quit)
+        master.bind("<Escape>", self.quit)
 
 root = Tk()
-App = Aplikacija(root, reading_parsing.random_beseda(), abeceda())
+App = Aplikacija(root, reading_parsing.random_beseda(), resources.abe)
 root.mainloop()

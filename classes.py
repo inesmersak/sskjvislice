@@ -14,8 +14,7 @@ class Beseda:
         return self.beseda
 
     def __repr__(self):
-        napis = self.beseda
-        return napis
+        return "Beseda(" + self.beseda + ")"
 
     def __len__(self):
         return len(self.beseda)
@@ -41,7 +40,7 @@ class Beseda:
         znano_zdaj = self.znano
         for x in niz:
             if x not in abc:
-                raise Exception("Napačen vnos!")
+                raise ValueError("Napačen vnos! Vrednost =", x)
             elif x in self.ugibano:
                 pass
             elif x in self.beseda:
