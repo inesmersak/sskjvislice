@@ -80,8 +80,6 @@ class Aplikacija():
             elif self.beseda.preostali_poskusi == 0:
                 self.porazi.set(str(int(self.porazi.get()) + 1))
             self.klici_def.grid()
-            self.beseda = reading_parsing.random_beseda()
-            self.novo = True
 
     def nova_igra(self, *args):
         """ Se poklice, kadar uporabnik klikne na gumb 'Nova igra', tipko F1, ali pa ce v meniju izbere moznost 'Nova
@@ -90,9 +88,11 @@ class Aplikacija():
         V kolikor beseda, ki je spravljena v atributu beseda, ni nova (torej v kolikor funkcije za pridobitev nove
         besede nismo klicali ze prej, recimo ob koncu igre), se poklice tudi funkcija random_beseda iz datoteke
         reading_parsing."""
-        if not self.novo:
-            self.beseda = reading_parsing.random_beseda()
-            self.novo = True
+        self.beseda = reading_parsing.random_beseda()
+        self.novo = True
+        # if not self.novo:
+        #     self.beseda = reading_parsing.random_beseda()
+        #     self.novo = True
         self.klici_def.grid_remove()
         for b in self.gumbi:
             b.grid()
