@@ -6,6 +6,8 @@ from classes import *
 
 
 def je_slovensko(beseda, abc=resources.abe):
+    """Preveri, ali vnešena beseda vsebuje le slovenske črke ter vrne True
+    ali false"""
     for x in beseda:
         if x not in abc:
             return False
@@ -13,10 +15,13 @@ def je_slovensko(beseda, abc=resources.abe):
 
 
 def naglasi(beseda, slovar_naglasov=resources.slovar_naglasov):
+    """SSKJ uporablja unicode kodiranje, kar pomeni, da so šumniki in črke
+    z naglasi zapisani s kodo. Ta funkcija jih zamenja s pravilno črko, kakor
+    je določeno v slovarju naglasov."""
     popravljeno = beseda
-    for k in slovar_naglasov:
-        for v in slovar_naglasov[k]:
-            popravljeno = popravljeno.replace(v, k)
+    for k in slovar_naglasov: #za vsako črko
+        for v in slovar_naglasov[k]: #pogleda vse različice naglasov    
+            popravljeno = popravljeno.replace(v, k) #in jih zamenja
     return popravljeno
 
 
@@ -24,10 +29,13 @@ def naslov(geslo, i=1):
     """Spremeni vpisano geslo v url naslov SSKJ-jevega iskalnika"""
     return "http://bos.zrc-sazu.si/cgi/a03.exe?name=sskj_testa&expression=" + \
            geslo.replace(" ", "+").replace("ge=", "ge%3D") + "&hs=" + str(i)
+    #spremeni tudi nekatere parametre, ki jih lahko vnesemo v iskalnik
 
     
 def stevilo_besed(geslo):
     """Vrne stevilo besed, ki jih SSKJ najde pod danim geslom"""
+    #SSKJ na vrhu izpiše število besed, ki vsebujejo iskano geslo kot koren
+    #ali se pojavlja v definiciji.
     r = requests.get(naslov(geslo))
     niso = re.compile(r"Zadetkov ni bilo: ")
     s = niso.search(r.text)
@@ -100,7 +108,7 @@ def definicija(geslo):
     mnozica = list()
     r = requests.get(url)
     big_r = r.text.split("<b>")
-    vzorec2 = r'.*<i>(.+):*.*</i>'
+    vzorec2 = r'.*<i>(.+)(:</i>|</i> )'
     for x in big_r:
         x = x.split("//")
         for y in x:

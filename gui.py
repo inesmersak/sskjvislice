@@ -20,7 +20,7 @@ class Aplikacija():
             x = x.split()
             for j, l in enumerate(x):
                 niz += l + ' '
-                if j > 0 and j % 9 == 0 and len(x) != j+1:
+                if j > 0 and j % 7 == 0 and len(x) != j+1:
                     niz += '\n'
             niz += '\n'
         self.defin.set(niz)
