@@ -11,7 +11,8 @@ class Aplikacija():
     def polepsaj_definicijo(self):
         """ Poklice funkcijo definiraj iz datoteke reading_parsing, dobljen seznam pa spremeni v niz in olepsa za
         prikaz:
-        postavi stevilko pred vsakim novim pomenom besede, doda prelom vrstice, kjer je definicija predolga. """
+        postavi stevilko pred vsakim novim pomenom besede, doda prelom vrstice, kjer je definicija predolga. Nazadnje
+        tudi prikaže definicijo na zaslonu (posodobi StringVar self.defin)."""
         sez = reading_parsing.definiraj(self.beseda)
         niz = ''
         for i, x in enumerate(sez):
@@ -22,6 +23,7 @@ class Aplikacija():
                 if j > 0 and j % 9 == 0 and len(x) != j+1:
                     niz += '\n'
             niz += '\n'
+        self.defin.set(niz)
         return niz
 
     def posodobi_sliko(self):
@@ -77,7 +79,7 @@ class Aplikacija():
                 self.zmage.set(str(int(self.zmage.get()) + 1))
             elif self.beseda.preostali_poskusi == 0:
                 self.porazi.set(str(int(self.porazi.get()) + 1))
-            self.defin.set(self.polepsaj_definicijo())
+            self.klici_def.grid()
             self.beseda = reading_parsing.random_beseda()
             self.novo = True
 
@@ -91,6 +93,7 @@ class Aplikacija():
         if not self.novo:
             self.beseda = reading_parsing.random_beseda()
             self.novo = True
+        self.klici_def.grid_remove()
         for b in self.gumbi:
             b.grid()
         self.defin.set('')
@@ -128,10 +131,13 @@ class Aplikacija():
         Label(okvir, textvariable=self.odkrito).grid(row=0, column=0)
 
         self.defin = StringVar()  # definicija se prikaze naknadno, po koncu igre
-        Label(okvir, textvariable=self.defin).grid(row=1, column=0)
+        self.klici_def = Button(okvir, text="Definicija", command=self.polepsaj_definicijo)
+        self.klici_def.grid(row=1, column=0)
+        self.klici_def.grid_remove()
+        Label(okvir, textvariable=self.defin).grid(row=2, column=0)
 
         novo = Button(okvir, text="Nova igra", command=self.nova_igra)
-        novo.grid(row=2, column=0)
+        novo.grid(row=3, column=0)
         # KONEC OKVIRJA Z BESEDO
 
         # ZACETEK OKVIRJA S TIPKOVNICO
