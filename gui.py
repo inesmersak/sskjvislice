@@ -20,7 +20,7 @@ class Aplikacija():
             x = x.split()
             for j, l in enumerate(x):
                 niz += l + ' '
-                if j > 0 and j % 9 == 0 and len(x) != j+1:
+                if j > 0 and j % 7 == 0 and len(x) != j+1:
                     niz += '\n'
             niz += '\n'
         self.defin.set(niz)
@@ -114,6 +114,8 @@ class Aplikacija():
 
         master.title('Vislice')
         master.minsize(width=380, height=300)
+        master.iconbitmap('slike/ikona.ico')
+
 
         # ZACETEK MENIJA
         self.meni = Menu(master)
@@ -134,7 +136,7 @@ class Aplikacija():
         self.klici_def = Button(okvir, text="Definicija", command=self.polepsaj_definicijo)
         self.klici_def.grid(row=1, column=0)
         self.klici_def.grid_remove()
-        Label(okvir, textvariable=self.defin).grid(row=2, column=0)
+        Label(okvir, textvariable=self.defin, justify=LEFT).grid(row=2, column=0)
 
         novo = Button(okvir, text="Nova igra", command=self.nova_igra)
         novo.grid(row=3, column=0)
