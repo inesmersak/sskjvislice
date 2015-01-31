@@ -2,6 +2,8 @@
 \usepackage [T1] {fontenc}
 \usepackage [utf8] {inputenc}
 \usepackage [slovene] {babel}
+\usepackage {url}
+\usepackage{graphicx}
 
 \title {Vislice}
 \author {Matic Oskar Hajšen, Ines Meršak}
@@ -15,9 +17,14 @@
 \newpage
 
 \section {Opis projekta}
-Ines
+Cilj najinega projekta je izdelati igrico vislice, pri čemer program izbere naključno besedo za ugibanje s spletnega Slovarja slovenskega knjižnega jezika, ki se nahaja na povezavi \url{http://bos.zrc-sazu.si/sskj.html}.
 \subsection {Zahteve projekta}
-Ines
+\begin {itemize}
+\item Izbrati naključno besedo iz spletnega slovarja.
+\item Podatkovna struktura, ki bo sledila napredku uporabnika -- kolikšen del besede je že uganjen in koliko poskusov je še ostalo.
+\item Grafični vmesnik, ki bo prikazoval napredek uporabnika, in vodil statistiko.
+\item  Pridobitev definicije izbrane besede po koncu igre, vkolikor uporabnik to želi.
+\end {itemize}
 
 \section {Opis spletnega podatkovnega vira}
 Matic
@@ -25,16 +32,61 @@ Matic
 Matic
 
 \section {Opis podatkovnega modela}
-Tukaj še kakšno bedarijo skupaj napiševa I guess
-\subsection {Razred Beseda}
-Ines
+Projekt je razdeljen na:
+\begin {enumerate}
+\item pridobivanje besede in definicije s spletnega slovarja in obdelava teh podatkov,
+\item programiranje ustreznega podatkovnega tipka za hranjenje besede, definicije, in drugih uporabnih podatkov o igri,
+\item programiranje grafičnega vmesnika.
+\end {enumerate}
+
 \subsection {Metode za branje in obdelavo podatkov}
 Matic
 
+\subsection {Razred Beseda}
+Razred Beseda vsebuje atribute beseda, definicija, neznano, znano, preostali\_poskusi in ugibano ter metode velike, za\_gui, ugibaj in reseno.
+\subsubsection {Atributi}
+\begin {itemize}
+\item \textbf {beseda}: Vsebuje izbrano besedo za vislice.
+\item \textbf {definicija}: Vsebuje definicijo besede; ob klicu konstruktorja je vrednost definicije privzeto None.
+\item \textbf {neznano}: Vsebuje črke besede, ki še niso bile ugibane; na začetku je to kar cela beseda. 
+\item \textbf {znano}: Vsebuje niz, ki predstavlja trenutno znane dele besede. Na mestu črk, ki so neznane, stoji podčrtaj. Na začetku je ta niz sestavljen iz toliko podčrtajev, kolikor je dolga beseda.
+\item \textbf {preostali\_poskusi}: Števec, ki beleži število preostalih poskusov uporabnika; na začetku je vrednost tega atributa nastavljena na 11. 
+\item \textbf {ugibano}: Niz, ki beleži, katere črke je uporabnik že ugibal; na začetku je niz prazen.
+\end {itemize}
+\subsubsection {Metode}
+\begin {itemize}
+\item \textbf {velike}: Vrne izbrano besedo, torej atribut beseda, napisano z velikimi črkami.
+\item \textbf {za\_gui}: Do sedaj znane dele besed, torej atribut znano, pripravi za prikaz v grafičnem vmesniku, tako da med črke oziroma podčrtaje doda poljubno število presledkov, in pripravljen niz vrne. Če je igre konec, potem vrne že povsem odkrito besedo, brez podčrtajev. 
+\item \textbf{ugibaj}: Sprejme ugiban znak (deluje tudi za nize) uporabnika. Preveri znak: če ta ni v slovenski abecedi, vrne napako; če je znak med že ugibanim znaki, ne naredi ničesar; če je znak del besede, metoda posodobi atribute znano, neznano in ugibano; če znak ni del besede, pa posodobi atribute ugibano in preostali\_poskusi. Če se je atribut znano spremenil, potem metoda vrne ta atribut, sicer pa ne vrne ničesar. 
+\item \textbf{reseno}: Preveri, ali je uporabnik že uganil iskano besedo.
+\end {itemize}
+
 \section {Uporabniški vmesnik}
-Ines
+\begin {figure} [h]
+\centering
+\includegraphics [height=190pt] {slike/za_porocilo_gui.png}
+\caption {Grafični vmesnik na začetku nove igre.}
+\end {figure}
+\noindent Grafični vmesnik je sestavljen iz preprostega menija in glavnega okna.  Glavno okno je razdeljeno na štiri razdelke. \\
+Levo zgoraj se nahaja Label z do zdaj uganjeno besedo, gumb za začetek nove igre, ob koncu igre pa se tam pojavi tudi gumb za pridobitev definicije in Label z definicijo. \\
+Levo spodaj se nahaja platno s spreminjajočo se sliko, ki uporabniku pove, koliko je 'obešen', pod platnom pa se nahaja še števec preostalih poskusov.  \\
+Desno zgoraj se nahaja tipkovnica, sestavljena iz gumbov, s pomočjo katerih lahko uporabnik vnaša znake. \\
+Desno spodaj pa je okvirček s statistiko, ki beleži uporabnikove zmage in poraze za trenutno sejo. 
 \subsection {Navodila za uporabo}
-Ines
+Ko uporabnik zažene datoteko gui.py, lahko takoj prične z igro. Znake lahko vnaša s pomočjo gumbov, ki se nahajajo desno zgoraj v glavnem oknu programa, ali s pomočjo tipkovnice. Pri tem se za vsak pravilno uganjen znak posodobi Label z do zdaj uganjeno besedo , za vsak napačen znak pa se posodobi slika, števec preostalih poskusov pa se zmanjša za 1. Ob koncu igre se ne glede na zmago ali poraz uporabnika odkrije celotna beseda, prav tako pa se levo zgoraj pojavi gumb 'Definicija', ki poskrbi za prikaz definicije ob kliku nanj. Prav tako se ob koncu igre zabeleži zmaga ali poraz v okvirčku 'Statistika' in, vkolikor je uporabnik zgubil, se prikaže slabo narisana slika obešenega človečka. \\
+Uporabnik lahko novo igro prične s pomočjo gumba 'Nova igra', izbire 'Nova igra' v meniju ali gumba F1. \\
+Uporabnik lahko zapre program s klikom na rdeč križec v desnem zgornjem kotu okna, izbiro 'Izhod' v meniju ali s pritiskom na gumb Esc.
+\begin {figure} [h]
+\centering
+\includegraphics [width=125pt] {slike/za_porocilo_gui_progress.png}
+\includegraphics [width=125pt] {slike/za_porocilo_gui_zmaga.png}
+\includegraphics [width=125pt] {slike/za_porocilo_gui_definicija.png}
+\caption {Od leve proti desni: grafični vmesnik med potekom igre, ob koncu igre in ob kliku na gumb 'Definicija'.}
+\end {figure}
 
 \section {Implementacija in testiranje programa}
+Oba nekaj nakladava vzvezi s tem kako sva to naredila in kdo vse je to testiral.
+
+\section {Zaključek}
+We bullshit something.
 \end {document}
