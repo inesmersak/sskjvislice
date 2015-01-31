@@ -114,7 +114,7 @@ class Aplikacija():
 
         master.title('Vislice')
         master.minsize(width=380, height=300)
-        master.iconbitmap('slike/ikona.ico')
+        #master.iconbitmap('slike/ikona.ico')
 
 
         # ZACETEK MENIJA
