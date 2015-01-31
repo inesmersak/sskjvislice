@@ -55,14 +55,18 @@ Dobi niz geslo in poišče vse besede, ki vsebujejo geslo. "ge=geslo" vrne točn
 vseh besed v SSKJ-ju. Dolzina pove, koliko je lahko beseda dolga. pogoj: True prepusti vse
 besede, ne glede na dolžino ali slovenskost.
     """
-    def pogojnost(x, pogoj):
-        return ((" " not in x.beseda) and (len(l) < omejitev) and spodnja_dolzina <= len(x.beseda) <= zgornja_dolzina
+    def pogojnost(x):
+        return ((" " not in x.beseda) and (len(l) < omejitev)
+                and spodnja_dolzina <= len(x.beseda) <= zgornja_dolzina
                 and je_slovensko(x.beseda)) or pogoj
+    # pogojnost omeji besede na takšne, kakršne iščemo. Svoja funkcija je zato, ker se uporablja na dveh mestih.
     l = list()
     vzorec = re.compile(r'<font face="Arial Unicode MS"><b>.*</b></font>&nbsp;')
     vzorec2 = r'.*<font face="Arial Unicode MS"><b>(.*)</b></font>&nbsp;'
     zgornja_meja = stevilo_besed(geslo)
     # ločena primera sta zato, ker pri uporabi "ge=" ne obarva rdeče
+    # SSKJ ima besede razvrščene po 25 na stran, ki ima v URL-ju zaporedno številko prve. Naslednja stran se začne 
+    # z za 25 višjo številko.
     if ("*" in geslo) or ("ge=" in geslo):
         for i in range(spodnja_meja-1, zgornja_meja, 25):
             r = requests.get(naslov(geslo, i))
@@ -70,7 +74,7 @@ besede, ne glede na dolžino ali slovenskost.
             for x in s:
                 zadetek = re.match(vzorec2, x)
                 a = Beseda(naglasi(zadetek.group(1)))
-                if pogojnost(a, pogoj):
+                if pogojnost(a):
                     l += [a]
                     if len(l) >= omejitev:
                         return l
@@ -86,9 +90,10 @@ besede, ne glede na dolžino ali slovenskost.
                 for x in s:
                     zadetek = re.match(vzorec2, x)
                     a = naglasi(zadetek.group(1))
-                    if "<font color=red>" in a:  # ustavi, ko najde vse besede, ki vsebujejo geslo
+                    if "<font color=red>" in a:
+                        # ustavi, ko najde vse besede, ki vsebujejo geslo, kar določa s tem, ali je beseda rdeča ali ne.
                         b = Beseda(naglasi(a).replace("<font color=red>", "").replace("</font>", ""))
-                        if pogojnost(b, pogoj):
+                        if pogojnost(b):
                             l += [b]
                             if len(l) >= omejitev:
                                 return l
@@ -101,6 +106,7 @@ besede, ne glede na dolžino ali slovenskost.
 
 
 def definicija(geslo):
+    """Poišče definicijo besede, vnešene kot geslo, če se nahaja v SSKJ."""
     if "ge=" in geslo:
         url = naslov(geslo)
     else:
@@ -108,6 +114,10 @@ def definicija(geslo):
     mnozica = list()
     r = requests.get(url)
     big_r = r.text.split("<b>")
+    # Vsaka beseda je napisano odebeljeno. Če ima več definicij, so napisane po odebeljenih številkah.
+    # S splitom dobimo tekst posameznih definicij v obeh primerih.
+    # Iskane definicije so napisane poševno in se končajo z ":", če je za njimi naveden primer.
+    # Pri nekaterih besedah primera ni.
     vzorec2 = r'.*<i>(.+)(:</i>|</i> )'
     for x in big_r:
         x = x.split("//")
@@ -120,10 +130,20 @@ def definicija(geslo):
                     mnozica.append(a)
                 else:
                     pass
+    # Definicija nekaterih besed pravi, da moramo gledati drugo besedo.
+    if mnozica == []:
+        vzorec1 = r'.* <font size=-1>gl.</font> (.+) <font face="Lucida Sans Unicode">&#x266A;</font>'
+        a = re.match(vzorec1, big_r[1])
+        if a:
+            a = a.group(1)
+            a = naglasi(a)
+            a = a.split(" ")[0]
+            mnozica = definicija(str(a))
     return mnozica
 
 
 def definiraj(beseda):
+    """Še en možen način, da dodaš definicijo besedi."""
     if beseda.definicija:
         return beseda.definicija
     else:
@@ -133,6 +153,8 @@ def definiraj(beseda):
 
 def random_crke(tezavnost="normal"):
     """tezavnost "normal": ni omejitve črk, na "easy" je srednja samoglasnik"""
+    # Neuporabljen način iskanje naključnih besed.
+    # To si izmisli niz treh naključnih črk.
     if tezavnost == "normal":
         x = random.randint(0, 24)
         y = random.randint(0, 24)
@@ -155,15 +177,15 @@ def random_crke(tezavnost="normal"):
 
 
 def random_besede(tezavnost="normal", meja=10, zg_dolzina=15, sp_dolzina=3):
+    # Neuporabljen način iskanje naključnih besed.
+    # Iz naključnega niza treh črk poišče besedo. Traja predolgo.
     crke = random_crke(tezavnost)
     c = stevilo_besed(crke)
     if c == 0:
-        print("KNOPE!")
         return random_besede(tezavnost)
     a = random.randint(1, max(1, c - meja))
     bese = najdi_sskj(crke, spodnja_meja=a, omejitev=meja, zgornja_dolzina=zg_dolzina, spodnja_dolzina=sp_dolzina)
     if (bese == []) or (bese is None):
-        print("LESLIE!")
         return random_besede(tezavnost)
     else:
         return bese
@@ -171,5 +193,7 @@ def random_besede(tezavnost="normal", meja=10, zg_dolzina=15, sp_dolzina=3):
 
 def random_beseda(sp_dolzina=3, zg_dolzina=8):
     """Vrne naključno besedo razreda Beseda, katere dolžina je med parametroma."""
+    # Izbere naključno številko in išče najbližjo ustrezno besedo z zaporedno številko, večjo ali enako od izbrane.
+    # Mogoče je še določati dolžino besede.
     return najdi_sskj(geslo="*", spodnja_meja=random.randint(1, 93140), omejitev=1, zgornja_dolzina=zg_dolzina,
                       spodnja_dolzina=sp_dolzina)[0]
