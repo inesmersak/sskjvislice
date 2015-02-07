@@ -39,11 +39,9 @@ Cilj najinega projekta je izdelati igrico vislice, pri čemer program izbere nak
 \end {itemize}
 
 \section {Opis spletnega podatkovnega vira}
-<<<<<<< HEAD
-Spletni SSKJ vsebuje iskalnik besed, v katerega se da vpisati več parametrov, da je iskanje še bolj omejeno. Lahko se določi dolžina besed, kako natančno mora beseda ustrezati iskanemu geslu in preveri, ali opis besede vsebuje določen kvalifikator. URL naslov strani, na kateri se prikažejo rezultati iskanja, je odvisen od vnešenega gesla iskanja. Na primer: \url {http://bos.zrc-sazu.si/cgi/a03.exe?name=sskj_testa&expression=beseda&hs=1l}. Beseda po "expression=" je vnešeno geslo, število na koncu pa zaporedna številka prvega razultata na strani. Na eni strani je do 25 besed, urejenih po abecednem redu. Vsaka beseda je oštevilčena in številka prve prikazane besede je določena v URL naslovu. Stran uporablja Unicode za zapis šumnikov in naglašenih črk.
-=======
-Spletni SSKJ vsebuje iskalnik besed, v katerega se da vpisati več parametrov, da je iskanje še bolj omejeno. Lahko se določi dolžina besed, kako natančno mora beseda ustrezati iskanemu geslu in preveri, ali opis besede vsebuje določen kvalifikator. URL naslov strani, na kateri se prikažejo rezultati iskanja, je odvisen od vnešenega gesla iskanja. Na eni strani je do 25 besed, urejenih po abecednem redu. Vsaka beseda je oštevilčena in številka prve prikazane besede je določena v URL naslovu. Stran uporablja Unicode za zapis šumnikov in naglašenih črk.
->>>>>>> 75025e21a7a9ae3c206507c4ccb609cd70e5fe2e
+Spletni SSKJ vsebuje iskalnik besed, v katerega se da vpisati več parametrov, da je iskanje še bolj omejeno. Lahko se določi dolžina besed, kako natančno mora beseda ustrezati iskanemu geslu in preveri, ali opis besede vsebuje določen kvalifikator. \\
+ URL naslov strani, na kateri se prikažejo rezultati iskanja, je odvisen od vnešenega gesla iskanja. Na primer: \url {http://bos.zrc-sazu.si/cgi/a03.exe?name=sskj_testa&expression=beseda&hs=1l}. Beseda po "expression=" je vnešeno geslo, število na koncu pa zaporedna številka prvega razultata na strani. \\
+Na eni strani je do 25 besed, urejenih po abecednem redu. Vsaka beseda je oštevilčena in številka prve prikazane besede je določena v URL naslovu. Stran uporablja Unicode za zapis šumnikov in naglašenih črk.
 \subsection {Opis načina pridobivanja podatkov}
 Za pridobivanje podatkov s spletnega vira sta uporabljena Python modula \textbf {re} in \textbf {requests} ter iskalnik na strani. Beseda, ki jo igralec ugiba, je izbrana naključno s seznama vseh besed v SSKJ, ki je rezultat iskanja z geslom "*". Definicije posameznih besed, ki se lahko prikažejo na koncu igre, so najdene z geslom "ge=beseda", ki vrne le to besedo.
 
@@ -63,11 +61,7 @@ Za igro je najbolj potrebna funkcija \textbf {random\_beseda}, ki pa temelji na 
 \item \textbf {naglasi}: Zamenja Unicode zapis šumnikov in naglašenih črk z ustrezno črko.
 \item \textbf {naslov}: Iz vnešenega gesla ustvari URL naslov, ki ustreza strani rezultatov iskanja.
 \item \textbf {stevilo\_besed}: Vrne število zadetkov iskanja.
-<<<<<<< HEAD
-\item \textbf {najdi\_sskj}: Išče besede glede na podane omejitve, kakor da bi vnešeno geslo iskali na strani SSKJ, in v ta namen uporablja zgoraj opisane funkcije. Funkciji lahko podamo samo "niz", ali pa ga natančneje določimo, oziroma omejimo, z "ge=niz" (Tako najde le besede, ki so točno takšne kot niz.) ali "ge=niz*" (Tako najde besede, ki se začnejo na "niz".) Funkcija vrača rezultate na dva ločena načina, glede na to, kaj ji je bilo podano:
-=======
-\item \textbf {najdi\_sskj}: Išče besede glede na podane omejitve in v ta namen uporablja zgoraj opisane funkcije. Ločena sta dva različna primera:
->>>>>>> 75025e21a7a9ae3c206507c4ccb609cd70e5fe2e
+\item \textbf {najdi\_sskj}: Išče besede glede na podane omejitve, kakor da bi vnešeno geslo iskali na strani SSKJ, in v ta namen uporablja zgoraj opisane funkcije. Funkciji lahko podamo samo "niz", ali pa ga natančneje določimo, oziroma omejimo, z "ge=niz" (Tako najde le besede, ki so točno takšne kot niz.) ali "ge=niz*". (Tako najde besede, ki se začnejo na "niz".) Funkcija vrača rezultate na dva ločena načina, glede na to, kaj ji je bilo podano:
 \begin {itemize}
 \item Iskano geslo omejimo z "ge=": to pomeni, da išče le besede, ki geslo vsebujejo in se ne pojavlja le v njihovem opisu. V tem primeru funkcija poišče vse besede na strani, nato pa gre na naslednjo tako, da poveča številko v URL naslovu za 25, dokler ne zaobjame vseh rezultatov.
 \item Če v iskalnik vpišemo le niz sam, se niz v rezultatih obarva z rdečo. Na ta način SSKJ najde tudi besede, ki imajo niz v opisu. Funkcija zato vzame samo besede, ki so obarvane rdeče, in se ustavi, ko pride do prve besede, ki je povsem črna, torej ne vsebuje iskanega niza.
@@ -115,11 +109,7 @@ Desno spodaj pa je okvirček s statistiko, ki beleži uporabnikove zmage in pora
 \section {Implementacija in testiranje programa}
 Iskanje besed in grafični vmesnik sta bila ustvarjena ločeno in združena šele proti koncu. Vsak del je bil sproti testiran, vendar je nekaj napak vseeno ostalo do združitve. \\
 Največ težav je bilo pri iskanju definicij, ki se lahko prikažejo na koncu igre, saj obstaja veliko različnih načinov, kako SSKJ opisuje besede, in potrebno je bilo upoštevati vse. Ker je nemogoče preverjati pravilnost delovanja programa za vse besede kar po vrstnem redu, je bila napaka odpravljena, ko je bila opažena med igro -- torej naključno. \\
-<<<<<<< HEAD
 Za testiranje so bili uporabljeni starši in kolegi. Nekateri njihovi predlogi so bili upoštevani pri spremembi programa.
-=======
-Za testiranje so bili uporabljeni starši in sošolci. Nekateri njihovi predlogi so bili upoštevani pri spremembi programa.
->>>>>>> 75025e21a7a9ae3c206507c4ccb609cd70e5fe2e
 
 \section {Zaključek}
 Ena izmed najinih prvotnih zamisli je bila, da bi igra poznala več stopenj težavnosti in bi izbirala besede glede na to, kako težko jih je uganiti. Zametek tega je viden v neuporabljeni funkcij \textbf {random\_besede}. Vgraditi samo ločevanje težavnosti ne bi bilo težko, saj obstaja že veliko pogojev, ki jim mora beseda zadostiti. Težava nastane pri prepoznavanju, katera beseda je zahtevnejša od druge. \\
