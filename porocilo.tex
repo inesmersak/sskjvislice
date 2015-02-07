@@ -80,6 +80,25 @@ Razred Beseda vsebuje atribute beseda, definicija, neznano, znano, preostali\_po
 \item \textbf{reseno}: Preveri, ali je uporabnik že uganil iskano besedo.
 \end {itemize}
 
+\subsection {Razred Beseda}
+Razred Beseda vsebuje atribute beseda, definicija, neznano, znano, preostali\_poskusi in ugibano ter metode velike, za\_gui, ugibaj in reseno.
+\subsubsection {Atributi}
+\begin {itemize}
+\item \textbf {beseda}: Vsebuje izbrano besedo za vislice.
+\item \textbf {definicija}: Vsebuje definicijo besede; ob klicu konstruktorja je vrednost definicije privzeto None.
+\item \textbf {neznano}: Vsebuje črke besede, ki še niso bile ugibane; na začetku je to kar cela beseda. 
+\item \textbf {znano}: Vsebuje niz, ki predstavlja trenutno znane dele besede. Na mestu črk, ki so neznane, stoji podčrtaj. Na začetku je ta niz sestavljen iz toliko podčrtajev, kolikor je dolga beseda.
+\item \textbf {preostali\_poskusi}: Števec, ki beleži število preostalih poskusov uporabnika; na začetku je vrednost tega atributa nastavljena na 11. 
+\item \textbf {ugibano}: Niz, ki beleži, katere črke je uporabnik že ugibal; na začetku je niz prazen.
+\end {itemize}
+\subsubsection {Metode}
+\begin {itemize}
+\item \textbf {velike}: Vrne izbrano besedo, torej atribut beseda, napisano z velikimi črkami.
+\item \textbf {za\_gui}: Do sedaj znane dele besed, torej atribut znano, pripravi za prikaz v grafičnem vmesniku, tako da med črke oziroma podčrtaje doda poljubno število presledkov, in pripravljen niz vrne. Če je igre konec, potem vrne že povsem odkrito besedo, brez podčrtajev. 
+\item \textbf{ugibaj}: Sprejme ugiban znak (deluje tudi za nize) uporabnika. Preveri znak: če ta ni v slovenski abecedi, vrne napako; če je znak med že ugibanim znaki, ne naredi ničesar; če je znak del besede, metoda posodobi atribute znano, neznano in ugibano; če znak ni del besede, pa posodobi atribute ugibano in preostali\_poskusi. Če se je atribut znano spremenil, potem metoda vrne ta atribut, sicer pa ne vrne ničesar. 
+\item \textbf{reseno}: Preveri, ali je uporabnik že uganil iskano besedo.
+\end {itemize}
+
 \section {Uporabniški vmesnik}
 \begin {figure} [h]
 \centering
@@ -111,4 +130,6 @@ Za testiranje so bili uporabljeni starši in sošolci. Nekateri njihovi predlogi
 \section {Zaključek}
 Ena izmed prvotnih zamisli je bila, da bi igra poznala več težavnosti in bi izbirala besede, glede na to, kako težke so za uganiti. Zametek tega je viden v neuporabljeni funkcij \textbf {random\_besede}. Vgraditi samo ločevanje težavnosti ne bi bilo težko, saj obstaja že veliko pogojev, ki jim mora beseda zadostiti. Težava nastane pri prepoznavanju, katera beseda je zahtevnejša od druge. \\
 Trenutno so vse besede izbrane povsem naključno. Zna se zgoditi, da je izbrana beseda, ki jo vsak pozna in dnevno uporablja. Prav tako je mogoče, da je beseda starinska in narečna. Po eni strani to daje igri težavnost, kajti igralec ne pozna svojega nasprotnika, kot pri običajnih vislicah s prijatelji. Program nima najljubših besed ali črk, po katerih je možno sklepati, kakšno besedo si je izmislil. Igralec lahko samo igra in upa, da bo poznal naslednjo besedo. 
+
+
 \end {document}
