@@ -36,7 +36,7 @@ class Beseda:
                 g += x + " " * presledki
         return g[:len(g)-presledki]
 
-    def ugibaj(self, niz, abc=resources.abeceda()):
+    def ugibaj(self, niz, abc=resources.abe):
         znano_zdaj = self.znano
         for x in niz:
             if x not in abc:
